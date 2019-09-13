@@ -1,24 +1,19 @@
+//Third party pkgs
 const express = require('express');
+const bodyParser = require('body-parser')
 
 const app = express();
- const bodyParser= require('body-parser')
 
-app.use(bodyParser.urlencoded({ extended: false }));
+// REQURING THE ROUTES
+const adminRoutes = require('./routes/admin')
+const shopRoutes = require('./routes/shop')
 
-app.get('/add-product', (req, res, next )=>{
-    // console.log('in the secone middle');
-    res.send('<form action="/product" method="POST"><input name="title" type="text"> <button type="submit">Add product</button></form>')
-});
+app.use(bodyParser.urlencoded({extended: false}));
 
-app.post('/product', (req, res, next)=>{
-    console.log(req.body.title);
-    res.redirect('/');
-})
+// ROUTES
+app.use(adminRoutes);
+app.use(shopRoutes);
 
-app.get('/', (req, res, next )=>{
-    // console.log('in the secone middle')
-    res.send('HOOME')
-});
 
 
 app.listen(3000);
