@@ -4,11 +4,15 @@ const path = require("path");
 //3rd party module
 const express= require('express');
 
+//getting the root directory
+const rootDir = require('../util/path')
+
+
 const router =express.Router();
 
 //  /admin/add-product => GET
 router.get('/add-product', (req, res, next )=>{
-    res.sendFile(path.join(__dirname, '../', 'views', 'add-product.html'));
+    res.sendFile(path.join(rootDir, 'views', 'add-product.html'));
 });
  
 //  /admin/add-product => POST
