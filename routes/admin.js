@@ -1,14 +1,19 @@
+//core module
+const path = require("path");
+
+//3rd party module
 const express= require('express');
 
 const router =express.Router();
 
+//  /admin/add-product => GET
 router.get('/add-product', (req, res, next )=>{
-    // console.log('in the secone middle');
-    res.send('<form action="/product" method="POST"><input name="title" type="text"> <button type="submit">Add product</button></form>')
+    res.sendFile(path.join(__dirname, '../', 'views', 'add-product.html'));
 });
-
-router.post('/product', (req, res, next)=>{
-    console.log(req.body.title);
+ 
+//  /admin/add-product => POST
+router.post('/add-product', (req, res, next)=>{
+    console.log(req.body);
     res.redirect('/');
 })
 
