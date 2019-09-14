@@ -1,26 +1,26 @@
-.product-form{
+.product-form {
     width: 20rem;
     max-width: 90%;
     margin: auto;
 }
 
-.form-control{
+.form-control {
     margin: .7rem 0;
 }
 
 .form-control label,
-.form-control input{
+.form-control input {
     display: block;
     width: 100%
 }
 
-.form-control input{
+.form-control input {
     border: 1px solid #dbc441;
     font: inherit;
     border-radius: 2px;
 }
 
-button{
+button {
     font: inherit;
     border: 1px solid #2c0963;
     color: #2c0963;
@@ -30,7 +30,7 @@ button{
 }
 
 button:hover,
-button:active{
+button:active {
     color: white;
     background-color: #2c0963;
 }
