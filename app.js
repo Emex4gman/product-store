@@ -13,7 +13,8 @@ const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 
 app.use(bodyParser.urlencoded({extended: false}));
-
+//import our css files
+app.use(express.static(path.join(__dirname, 'Public')));
 // ROUTES
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
