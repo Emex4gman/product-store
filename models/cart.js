@@ -8,6 +8,7 @@ const p = path.join(path.dirname(process.mainModule.filename),
 
 
 module.exports = class Cart {
+
     static addProduct(id, productPrice) {
         //fectch the product from pevious cart 
         fs.readFile(p, (error, fileContent) => {
@@ -35,6 +36,9 @@ module.exports = class Cart {
         });
     }
 
+    static deleteProduct(id, productPrice) {
+        
+    }
 
 
 }
