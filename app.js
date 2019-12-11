@@ -1,10 +1,13 @@
+require('dotenv').config()
+const env = process.env
 //core module
 const path = require('path');
 
 //Third party pkgs
 const express = require('express');
 const bodyParser = require('body-parser')
-const mongoConnect = require('./util/database').mongoConnect
+const mongoose = require('mongoose');
+//const mongoConnect = require('./util/database').mongoConnect
 const User = require('./models/user')
 const app = express();
 
@@ -42,7 +45,7 @@ app.use(shopRoutes);
 app.use(pageNotFound.PageNotFound)
 
 
-mongoConnect(() => {
-
+mongoose.connect(env.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true }).then(result => {
+  console.log("DATABASE CONNETED");
   app.listen(3001);
-})
+}).catch(err => console.log(err))
