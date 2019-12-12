@@ -1,51 +1,81 @@
 require('dotenv').config()
 const env = process.env
-//core module
 const path = require('path');
 
-//Third party pkgs
 const express = require('express');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-//const mongoConnect = require('./util/database').mongoConnect
-const User = require('./models/user')
-const app = express();
+const session = require('express-session')
+const MongoDBStore = require('connect-mongodb-session')(session)
 
-//use templating engine
+const errorController = require('./controllers/error');
+const User = require('./models/user');
+
+const app = express();
+const store = new MongoDBStore({
+  uri: env.DB_URL,
+  collection: 'sessions'
+});
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
-
-// REQURING THE ROUTES
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
-const pageNotFound = require('./controllers/error')
-
+const authRoutes = require('./routes/auth');
 
 app.use(bodyParser.urlencoded({ extended: false }));
-//import our css files
-app.use(express.static(path.join(__dirname, 'Public')));
-
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(session(
+  {
+    secret: env.SECRET,
+    resave: false,
+    store: store,
+    saveUninitialized: false
+  }))
+// app.use((req, res, next) => {
+//   User.findById('5df1147cf658b14374611b74')
+//     .then(user => {
+//       req.user = user;
+//       next();
+//     })
+//     .catch(err => console.log(err));
+// });
 app.use((req, res, next) => {
-  User.findById('5dd8479e8f66d60f4839d4fb')
+  if (!req.session.user) {
+    return next();
+  }
+  User.findById(req.session.user._id)
     .then(user => {
-      req.user = new User(user.name, user.email, user.cart, user._id);
-      next()
+      req.user = user;
+      next();
     })
     .catch(err => console.log(err));
+});
 
-})
-// ROUTES
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
+app.use(authRoutes);
 
+app.use(errorController.get404);
 
-
-//404 error page the catch all routes v
-app.use(pageNotFound.PageNotFound)
-
-
-mongoose.connect(env.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true }).then(result => {
-  console.log("DATABASE CONNETED");
-  app.listen(3001);
-}).catch(err => console.log(err))
+mongoose
+  .connect(env.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(result => {
+    console.log("DATABASE CONNETED");
+    User.findOne().then(user => {
+      if (!user) {
+        const user = new User({
+          name: 'emex',
+          email: 'emeka@test.com',
+          cart: {
+            items: []
+          }
+        });
+        user.save();
+      }
+    });
+    app.listen(3000);
+  })
+  .catch(err => {
+    console.log(err);
+  });
