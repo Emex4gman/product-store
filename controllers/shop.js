@@ -159,7 +159,6 @@ exports.postOrder = (req, res, next) => {
   // Token is created using Checkout or Elements!
   // Get the payment token ID submitted by the form:
   const token = req.body.stripeToken;
-  //console.log(token)
   // Using Express
   let totalSum = 0;
 
