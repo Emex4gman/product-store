@@ -29,7 +29,7 @@ router.post('/signup',
 
         })
     }).normalizeEmail(),
-  body('password', "error is you password").isLength({ min: 5 }).isAlphanumeric().trim()
+  body('password', "error is your password, minimum of 5 characters").isLength({ min: 5 }).isAlphanumeric().trim()
     ,
   body('confirmPassword').trim().custom((vaule, { req }) => {
     if (vaule !== req.body.password) {
