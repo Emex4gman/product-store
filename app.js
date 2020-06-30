@@ -15,7 +15,7 @@ const multer = require('multer');
 const helmet = require('helmet')
 const compression = require('compression')
 const morgan = require('morgan')
-
+const { parser } = require('./middleware/imageUpload')
 const errorController = require('./controllers/error');
 const shopController = require('./controllers/shop');
 const isAuth = require('./middleware/isAuth')
@@ -74,12 +74,11 @@ const accessLogStream = fs.createWriteStream(
 app.use(helmet())
 app.use(compression())
 app.use(morgan('combined', { stream: accessLogStream }))
+app.use(morgan('dev'))
 
 
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(
-  multer({ storage: fileStorage }).single('image')
-);
+app.use(parser);
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use("/images", express.static(path.join(__dirname, 'images')));
