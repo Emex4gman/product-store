@@ -148,7 +148,9 @@ mongoose
   .connect(env.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(result => {
     console.log("DATABASE CONNETED");
-    app.listen(env.PORT || 3000);
+    app.listen(env.PORT || 3000, () => {
+      console.log(`App listening on port ${env.PORT}`);
+    });
   })
   .catch(err => {
     console.log(err);
